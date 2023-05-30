@@ -11,7 +11,7 @@ public class Address {
             throw new IllegalArgumentException("Invalid House No!");
         if(streetAddress==null || streetAddress.isEmpty())
             throw new IllegalArgumentException("Invalid Street Address!");
-        if(city!=null || city.isEmpty())
+        if(city==null || city.isEmpty())
             throw new IllegalArgumentException("Invalid City!");
         if(state==null || state.isEmpty())
             throw new IllegalArgumentException("Invalid State!");

@@ -36,4 +36,32 @@ public class Account {
     public void setBalance(double balance) {
         this.balance = balance;
     }
+
+    public void deposit(double amount) {
+        if (amount <= 0) {
+            throw new IllegalArgumentException("Invalid deposit amount!");
+        }
+        this.balance += amount;
+    }
+
+    public void transfer(Account recipientAccount, double amount) {
+        if (amount <= 0) {
+            throw new IllegalArgumentException("Invalid transfer amount!");
+        }
+        if (this.balance < amount) {
+            throw new IllegalArgumentException("Insufficient balance!");
+        }
+        this.balance -= amount;
+        recipientAccount.deposit(amount);
+    }
+
+    public void withdraw(double amount) {
+        if (amount <= 0) {
+            throw new IllegalArgumentException("Invalid withdrawal amount!");
+        }
+        if (this.balance < amount) {
+            throw new IllegalArgumentException("Insufficient balance!");
+        }
+        this.balance -= amount;
+    }
 }

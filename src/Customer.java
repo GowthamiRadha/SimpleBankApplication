@@ -10,7 +10,23 @@ public class Customer {
     private Address address;
     private LinkedList<Account> accounts;
 
-    public Customer(String name,String ssn,String hNo, String streetAddress, String city, String state, String country, int zipCode)
+    public String getName() {
+        return name;
+    }
+
+    public String getSsn() {
+        return ssn;
+    }
+
+    public Address getAddress() {
+        return address;
+    }
+
+    public LinkedList<Account> getAccounts() {
+        return accounts;
+    }
+
+    public Customer(String name, String ssn, String hNo, String streetAddress, String city, String state, String country, int zipCode)
     {
         this.name = name;
         this.ssn = ssn;
@@ -25,14 +41,15 @@ public class Customer {
         String accountNo = sc.next();
         Bank bankName = null;
         AccountType accountType;
-        System.out.println("1.SBI,\n" +
-                "    2. HDFC,\n" +
-                "    3. ICIC,\n" +
-                "    4. CHASE,\n" +
-                "    5. MIDFIRST,\n" +
-                "    6. BOA,\n" +
-                "    7. AmericanExpress");
-        System.out.println("Enter one of the available Bank options: ");
+        System.out.println("Select one of the available Banks:");
+        System.out.println("1. SBI");
+        System.out.println("2. HDFC");
+        System.out.println("3. ICIC");
+        System.out.println("4. CHASE");
+        System.out.println("5. MIDFIRST");
+        System.out.println("6. BOA");
+        System.out.println("7. AmericanExpress");
+        System.out.print("Enter the corresponding number for the Bank: ");
         int bankNo = sc.nextInt();
         switch(bankNo)
         {
@@ -60,8 +77,10 @@ public class Customer {
             default:
                 throw new IllegalArgumentException("Invalid Bank Name!");
         }
-        System.out.println("Choose 1.Savings or 2.Checkings account type");
-        System.out.println("Enter either 1 or 2 to select AccountType");
+        System.out.println("Select the account type:");
+        System.out.println("1. Savings");
+        System.out.println("2. Checkings");
+        System.out.print("Enter either 1 or 2 to choose the AccountType: ");
         int type = sc.nextInt();
         if(type==1)
             accountType = AccountType.SAVINGS;
@@ -78,6 +97,7 @@ public class Customer {
         account.setBankName(bankName);
         account.setAccountType(accountType);
         account.setBalance(0.00);
+        this.accounts.add(account);
     }
 
     public String deleteAccount(String accountNo) {
@@ -90,5 +110,48 @@ public class Customer {
             accounts.remove(idx);
             return "Successfully deleted Account having AccountNo as " + accountNo;
         }else return "No account present with given AccountNo!";
+    }
+
+    public void transferMoney(String senderAccountNo, String recipientAccountNo, double amount) {
+        Account senderAccount = findAccount(senderAccountNo);
+        Account recipientAccount = findAccount(recipientAccountNo);
+        if (senderAccount == null || recipientAccount == null) {
+            throw new IllegalArgumentException("Invalid account numbers!");
+        }
+        senderAccount.transfer(recipientAccount, amount);
+    }
+
+    public void depositMoney(String accountNo, double amount) {
+        Account account = findAccount(accountNo);
+        if (account == null) {
+            throw new IllegalArgumentException("Invalid account number!");
+        }
+        account.deposit(amount);
+    }
+
+    private Account findAccount(String accountNo) {
+        for (Account account : accounts) {
+            if (account.getAccountNo().equals(accountNo)) {
+                return account;
+            }
+        }
+        return null;
+    }
+
+    public void withdrawMoney(String accountNo, double amount) {
+        Account account = findAccount(accountNo);
+        if (account == null) {
+            throw new IllegalArgumentException("Invalid account number!");
+        }
+        account.withdraw(amount);
+    }
+
+    public double showBalance(String accountNo)
+    {
+        Account account = findAccount(accountNo);
+        if (account == null) {
+            throw new IllegalArgumentException("Invalid account number!");
+        }
+        return account.getBalance();
     }
 }
